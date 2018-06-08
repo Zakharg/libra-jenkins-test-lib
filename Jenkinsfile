@@ -1,21 +1,22 @@
 pipeline {
-    agent any
+    agent any 
 
     stages {
-        stage('Build') {
+        stage ('Compile stage') {
             steps {
-                echo 'Building..'
+	            withMaven(maven : 'Maven 3.5.0', globalMavenSettingsConfig: "12901f1e-1275-4898-a045-d4eed3f5303a") {
+	                sh 'mvn clean install'
+            	}
             }
         }
-        stage('Test') {
+        
+        stage ('Deployment Stage') {
             steps {
-                echo 'Testing..'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying....'
+	   			withMaven(maven : 'Maven 3.5.0', globalMavenSettingsConfig: "12901f1e-1275-4898-a045-d4eed3f5303a") {
+	            	sh 'mvn deploy'
+            	}
             }
         }
     }
+
 }
